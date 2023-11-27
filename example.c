@@ -1,25 +1,26 @@
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#endif // #define STB_IMAGE_IMPLEMENTATION
+#endif  // #define STB_IMAGE_IMPLEMENTATION
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_scancode.h>
 #include <SDL2/SDL_stdinc.h>
-#include <SDL_events.h>
-#include <SDL_pixels.h>
-#include <SDL_rect.h>
-#include <SDL_scancode.h>
-#include <SDL_surface.h>
-#include <SDL_timer.h>
-#include <SDL_video.h>
+#include <SDL2/SDL_surface.h>
+#include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_video.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 
 SDL_Surface *load_image(const char *filename);
 
 #define WINDOW_WIDTH 1024
 #define WINDOW_HEIGHT 768
 
-int main() {
+int main(int argc, char *argv[]) {
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) != 0) {
     fprintf(stderr, "SDL failed to initialize.");
     exit(EXIT_FAILURE);
@@ -40,48 +41,43 @@ int main() {
   while (!should_close) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-
       switch (event.type) {
-      case SDL_QUIT: {
-        should_close = SDL_TRUE;
-        break;
-      }
-
-      case (SDL_KEYDOWN): {
-        switch (event.key.keysym.scancode) {
-        case SDL_SCANCODE_ESCAPE:
+        case SDL_QUIT: {
           should_close = SDL_TRUE;
           break;
-
-        case SDL_SCANCODE_LEFT: {
-          if (image_x > 14)
-            image_x -= 14;
-          break;
         }
 
-        case SDL_SCANCODE_RIGHT: {
-          if ((image_x + image->w) < (WINDOW_WIDTH - 14))
-            image_x += 14;
-          break;
-        }
+        case (SDL_KEYDOWN): {
+          switch (event.key.keysym.scancode) {
+            case SDL_SCANCODE_ESCAPE:
+              should_close = SDL_TRUE;
+              break;
 
-        case SDL_SCANCODE_UP: {
-          if (image_y > 14)
-            image_y -= 14;
-          break;
-        }
+            case SDL_SCANCODE_LEFT: {
+              if (image_x > 14) image_x -= 14;
+              break;
+            }
 
-        case SDL_SCANCODE_DOWN: {
-          if ((image_y + image->h) < (WINDOW_HEIGHT - 14))
-            image_y += 14;
-          break;
+            case SDL_SCANCODE_RIGHT: {
+              if ((image_x + image->w) < (WINDOW_WIDTH - 14)) image_x += 14;
+              break;
+            }
+
+            case SDL_SCANCODE_UP: {
+              if (image_y > 14) image_y -= 14;
+              break;
+            }
+
+            case SDL_SCANCODE_DOWN: {
+              if ((image_y + image->h) < (WINDOW_HEIGHT - 14)) image_y += 14;
+              break;
+            }
+            default:
+              break;
+          }
         }
         default:
           break;
-        }
-      }
-      default:
-        break;
       }
     }
     SDL_FillRect(window_surface, NULL,
@@ -104,7 +100,7 @@ SDL_Surface *load_image(const char *filename) {
   Sint32 width = 0;
   Sint32 height = 0;
   Sint32 bytes_per_pixel =
-      0; // Since we work with bytes instead of bits here in C.
+      0;  // Since we work with bytes instead of bits here in C.
 
   // Now the good stuff:
   Uint8 *data = stbi_load(filename, &width, &height, &bytes_per_pixel, 0);
