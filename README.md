@@ -9,9 +9,9 @@ Driver function:
 #include "stb_image.h"
 #endif // #define STB_IMAGE_IMPLEMENTATION
 #include <SDL2/SDL.h>
-#include <SDL_pixels.h>
-#include <SDL_surface.h>
-#include <SDL_rect.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_surface.h>
+#include <SDL2/SDL_rect.h>
 
 SDL_Surface *load_image(const char *filename) {
   Sint32 width = 0;
